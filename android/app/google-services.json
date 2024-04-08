@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "299710943417",
+    "project_id": "milkmate-3946c",
+    "storage_bucket": "milkmate-3946c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299710943417:android:a116d6f618e76e9d77cb68",
+        "android_client_info": {
+          "package_name": "org.milkmate.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrd6qw2rKuqRe2NbpIXS5ITfQE6QE_H_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

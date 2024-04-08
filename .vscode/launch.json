@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "focus",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "focus (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "focus (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "unified_auth",
+            "cwd": "packages\\unified_auth",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "unified_auth (profile mode)",
+            "cwd": "packages\\unified_auth",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "unified_auth (release mode)",
+            "cwd": "packages\\unified_auth",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

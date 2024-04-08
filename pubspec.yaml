@@ -1,0 +1,58 @@
+name: milkmatehub
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.3.1 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  image_picker: ^1.0.7
+  firebase_auth: ^4.17.9
+  firebase_core: ^2.27.1
+  unified_auth:
+    path: C:/Student Projects/milkmate/packages/unified_auth
+  flutter_hooks: ^0.20.0
+  cloud_firestore: ^4.15.9
+  flutter_secure_storage: ^9.0.0
+  uuid: ^4.3.3
+  intl: ^0.18.1
+
+
+
+
+
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
+  package_rename: ^1.5.3
+ 
+
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+
+package_rename_config:
+  android:
+    app_name: Milk Mate Hub
+    package_name: org.milkmate.app
+
+  ios:
+    app_name: Milk Mate Hub
+    bundle_name: org.milkmate.app
+    package_name: org.milkmate.app
+
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/logo.png"
+  min_sdk_android: 25
