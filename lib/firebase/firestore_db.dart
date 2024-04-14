@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:milkmatehub/local_storage/key_value_storage_service.dart';
 import 'package:milkmatehub/models/feed_model.dart';
 import 'package:milkmatehub/models/insurance_model.dart';
+import 'package:milkmatehub/models/order_model.dart';
 import 'package:milkmatehub/models/production_record_model.dart';
 import 'package:milkmatehub/models/supplier_model.dart';
 import 'package:milkmatehub/models/user_model.dart';
@@ -66,6 +67,14 @@ class FirestoreDB {
       return data;
     } catch (e) {
       throw Exception('Error adding user: $e');
+    }
+  }
+
+  Future<void> cancellOrder(String orderId) async {
+    try {
+      await db.collection('orderCollection').doc(orderId).delete();
+    } catch (e) {
+      throw Exception('Error cancelling order: $e');
     }
   }
 
@@ -192,6 +201,18 @@ class FirestoreDB {
       return snapshot.data();
     } catch (e) {
       throw Exception('Error getting user: $e');
+    }
+  }
+
+  Future<void> placeOrder(OrderModel order) async {
+    try {
+      final data = await db
+          .collection('orderCollection')
+          .doc(order.orderId)
+          .set(order.toJson());
+      return data;
+    } catch (e) {
+      throw Exception('Error placing order: $e');
     }
   }
 }

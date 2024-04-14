@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:milkmatehub/firebase/firebaseconfig.dart';
 import 'package:milkmatehub/local_storage/key_value_storage_base.dart';
+import 'package:milkmatehub/screens/feed_order_screen.dart';
 import 'package:milkmatehub/screens/start_up_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   FirebaseConfig.initializeFirebase();
   CacheStorageBase.init();
-  runApp(const Milkmatehub());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => CartProvider()),
+  ], child: const Milkmatehub()));
 }
 
 class Milkmatehub extends HookWidget {

@@ -28,9 +28,9 @@ String generateRandomString() {
 Image imageFromBase64String(String base64String) {
   return Image.memory(
     base64Decode(base64String),
-    fit: BoxFit.fitHeight,
-    width: 60,
-    height: 60,
+    fit: BoxFit.fill,
+    // // width: 100,
+    // height: 100,
   );
 }
 

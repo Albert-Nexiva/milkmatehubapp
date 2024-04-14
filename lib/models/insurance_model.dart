@@ -9,6 +9,7 @@ class InsuranceModel {
   String causeOfDeath;
   String descriptionOfIncident;
   String typeOfCoverageRequested;
+  
 
   InsuranceModel({
     required this.uid,

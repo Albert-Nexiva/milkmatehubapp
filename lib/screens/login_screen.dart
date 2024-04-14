@@ -65,11 +65,22 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               onLogin: (loginData) async {
                 isLoading.value = true;
-                FireAuth.signInUsingEmailPassword(
-                  email: userNameController.text,
-                  password: passwordController.text,
-                  context: context,
-                );
+                try {
+                  FireAuth.signInUsingEmailPassword(
+                    email: userNameController.text,
+                    password: passwordController.text,
+                    context: context,
+                  );
+                } on Exception catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(e.toString()),
+                    ),
+                  );
+                  setState(() {
+                    isLoading.value = false;
+                  });
+                }
                 setState(() {
                   userStream = FirebaseAuth.instance.authStateChanges().listen(
                       (User? user) {
