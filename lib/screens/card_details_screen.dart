@@ -97,45 +97,47 @@ class CardDetailsScreen extends HookWidget {
                               backgroundColor: Colors.green,
                             ),
                             onPressed: () async {
-                              final SupplierModel user =
-                                  await cacheStorageService.getAuthUser();
-                              try {
-                                isLoading.value = true;
-                                FirestoreDB()
-                                    .placeOrder(OrderModel(
-                                      orderId: generateRandomString(),
-                                      supplierId: user.uid,
-                                      orderDate: DateTime.now(),
-                                      feeds: items,
-                                    ))
-                                    .then((value) => {
-                                          cartProvider.clearCart(),
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                  'Order Placed Successfully'),
+                              if (formKey.currentState!.validate()) {
+                                final SupplierModel user =
+                                    await cacheStorageService.getAuthUser();
+                                try {
+                                  isLoading.value = true;
+                                  FirestoreDB()
+                                      .placeOrder(OrderModel(
+                                        orderId: generateRandomString(),
+                                        supplierId: user.uid,
+                                        orderDate: DateTime.now(),
+                                        feeds: items,
+                                      ))
+                                      .then((value) => {
+                                            cartProvider.clearCart(),
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    'Order Placed Successfully'),
+                                              ),
                                             ),
-                                          ),
-                                          Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const DashboardScreen(),
+                                            Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const DashboardScreen(),
+                                              ),
+                                              (route) => false,
                                             ),
-                                            (route) => false,
-                                          ),
-                                        });
-                              } catch (e) {
-                                if (context.mounted) {
-                                  isLoading.value = false;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Order Failed!'),
-                                    ),
-                                  );
+                                          });
+                                } catch (e) {
+                                  if (context.mounted) {
+                                    isLoading.value = false;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Order Failed!'),
+                                      ),
+                                    );
+                                  }
+                                  return;
                                 }
-                                return;
                               }
                             },
                             child: const Text(
