@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:milkmatehub/local_storage/key_value_storage_service.dart';
 import 'package:milkmatehub/models/feed_model.dart';
+import 'package:milkmatehub/models/feedback_model.dart';
 import 'package:milkmatehub/models/insurance_model.dart';
 import 'package:milkmatehub/models/order_model.dart';
 import 'package:milkmatehub/models/production_record_model.dart';
@@ -69,8 +70,29 @@ class FirestoreDB {
       throw Exception('Error adding user: $e');
     }
   }
-
-  Future<void> cancellOrder(String orderId) async {
+  Future<void>addFeedback(FeedbackModel feedback) async {
+    try {
+      final data = await db
+          .collection('feedbackCollection')
+          .doc(feedback.feedbackId)
+          .set(feedback.toJson());
+      return data;
+    } catch (e) {
+      throw Exception('Error adding feedback: $e');
+    }
+  }
+Future<void> updateUserSubscription (UserModel user) async {
+    try {
+      final data = await db
+          .collection('userCollection')
+          .doc(user.uid)
+          .update(user.toJson());
+      return data;
+    } catch (e) {
+      throw Exception('Error updating user: $e');
+    }
+  }
+  Future<void> cancelOrder(String orderId) async {
     try {
       await db.collection('orderCollection').doc(orderId).delete();
     } catch (e) {
@@ -164,6 +186,22 @@ class FirestoreDB {
           .toList();
     } catch (e) {
       throw Exception('Error getting insurance claims: $e');
+    }
+  }
+
+  Future<List<OrderModel>> getMyOrders() async {
+    try {
+      CacheStorageService cacheStorageService = CacheStorageService();
+      final user = await cacheStorageService.getAuthUser();
+      final snapshot = await db
+          .collection('orderCollection')
+          .where('supplierId', isEqualTo: user!.uid)
+          .get();
+      return snapshot.docs
+          .map((doc) => OrderModel.fromJson(doc.data()))
+          .toList();
+    } catch (e) {
+      throw Exception('Error getting orders: $e');
     }
   }
 

@@ -25,8 +25,8 @@ class HomeScreen extends HookWidget {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notifications',
+            icon: Icon(Icons.shopping_cart),
+            label: 'My Orders',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -45,7 +45,7 @@ class HomeScreen extends HookWidget {
         itemBuilder: (context, index) {
           switch (index) {
             case 0:
-              return const NotificationScreen();
+              return const MyOrdersScreen();
             case 1:
               return const DashboardScreen();
             case 2:

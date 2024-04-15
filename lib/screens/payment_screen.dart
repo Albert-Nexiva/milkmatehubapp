@@ -210,6 +210,7 @@ class PaymentScreen extends HookWidget {
                                     supplierId: user.uid,
                                     orderDate: DateTime.now(),
                                     feeds: items,
+                                    status: OrderStatus.pending,
                                   ),
                                 )
                                     .then((value) {

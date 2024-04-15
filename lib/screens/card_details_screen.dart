@@ -108,6 +108,7 @@ class CardDetailsScreen extends HookWidget {
                                         supplierId: user.uid,
                                         orderDate: DateTime.now(),
                                         feeds: items,
+                                        status: OrderStatus.pending,
                                       ))
                                       .then((value) => {
                                             cartProvider.clearCart(),

@@ -5,13 +5,27 @@ class OrderModel {
   String supplierId;
   DateTime orderDate;
   List<FeedModel> feeds;
+  OrderStatus? status = OrderStatus.pending;
 
   OrderModel({
     required this.orderId,
     required this.supplierId,
     required this.orderDate,
     required this.feeds,
+    required this.status,
   });
+
+  factory OrderModel.fromJson(Map<String, dynamic> json) {
+    return OrderModel(
+      orderId: json['orderId'],
+      supplierId: json['supplierId'],
+      orderDate: DateTime.parse(json['orderDate']),
+      feeds: List<FeedModel>.from(
+          json['feeds'].map((feedJson) => FeedModel.fromJson(feedJson))),
+      status:
+          OrderStatus.values.firstWhere((e) => e.toString() == json['status']),
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -19,16 +33,9 @@ class OrderModel {
       'supplierId': supplierId,
       'orderDate': orderDate.toIso8601String(),
       'feeds': feeds.map((feed) => feed.toJson()).toList(),
+      'status': status,
     };
-  }
-
-  factory OrderModel.fromJson(Map<String, dynamic> json) {
-    return OrderModel(
-      orderId: json['orderId'],
-      supplierId: json['supplierId'],
-      orderDate: DateTime.parse(json['orderDate']),
-      feeds: List<FeedModel>.from(json['feeds'].map((feedJson) => FeedModel.fromJson(feedJson))),
-    );
   }
 }
 
+enum OrderStatus { pending, processing, shipped, delivered, cancelled }

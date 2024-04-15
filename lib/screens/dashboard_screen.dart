@@ -5,6 +5,8 @@ import 'package:milkmatehub/models/supplier_model.dart';
 import 'package:milkmatehub/screens/feed_order_screen.dart';
 import 'package:milkmatehub/screens/insurance_screen.dart';
 import 'package:milkmatehub/screens/production_records_tab.dart';
+import 'package:milkmatehub/screens/user_modules/feedback.dart';
+import 'package:milkmatehub/screens/user_modules/subscriptions.dart';
 
 Widget buildGridItem(
     {required IconData icon,
@@ -120,26 +122,28 @@ class DashboardScreen extends StatelessWidget {
                                       ]
                                     : [
                                         buildGridItem(
-                                          icon: Icons.history,
-                                          label: 'Purchase History',
+                                          icon: Icons.shopping_bag,
+                                          label: 'Subscriptions',
                                           onTap: () {
-                                            // Navigator.of(context).push(MaterialPageRoute(
-                                            //     builder: (context) =>
-                                            //         const ProductionRecordTabScreen()));
-                                          },
-                                        ),
-                                        buildGridItem(
-                                          icon: Icons.payment,
-                                          label: 'Payments',
-                                          onTap: () {
-                                            // Navigator.of(context).push(MaterialPageRoute(
-                                            //     builder: (context) =>
-                                            //         const ProductionRecordTabScreen()));
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const Subscriptions()));
                                           },
                                         ),
                                         buildGridItem(
                                           icon: Icons.feedback,
                                           label: 'Feedback',
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const FeedbackScreen()));
+                                          },
+                                        ),
+                                        buildGridItem(
+                                          icon: Icons.payment,
+                                          label: 'Payments',
                                           onTap: () {
                                             // Navigator.of(context).push(MaterialPageRoute(
                                             //     builder: (context) =>
