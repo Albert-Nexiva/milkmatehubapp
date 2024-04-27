@@ -5,6 +5,7 @@ import 'package:milkmatehub/models/supplier_model.dart';
 import 'package:milkmatehub/screens/feed_order_screen.dart';
 import 'package:milkmatehub/screens/insurance_screen.dart';
 import 'package:milkmatehub/screens/production_records_tab.dart';
+import 'package:milkmatehub/screens/sales_summary.dart';
 import 'package:milkmatehub/screens/user_modules/feedback.dart';
 import 'package:milkmatehub/screens/user_modules/subscriptions.dart';
 
@@ -92,11 +93,12 @@ class DashboardScreen extends StatelessWidget {
                                         ),
                                         buildGridItem(
                                           icon: Icons.calendar_month,
-                                          label: 'Monthly Summary',
+                                          label: 'Sales Summary',
                                           onTap: () {
-                                            // Navigator.of(context).push(MaterialPageRoute(
-                                            //     builder: (context) =>
-                                            //         const ProductionRecordTabScreen()));
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const SalesSummary()));
                                           },
                                         ),
                                         buildGridItem(

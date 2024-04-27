@@ -1,3 +1,5 @@
+import 'package:milkmatehub/screens/sales_summary.dart';
+
 class ProductionRecordModel {
   String readingSlot;
   String id;
@@ -48,10 +50,49 @@ class ProductionRecordModel {
       'date': date,
     };
   }
+  static List<SalesData> calculateMonthlySales(List<ProductionRecordModel> records) {
+    Map<String, double> monthlySales = {};
+
+    // Calculate total sales for each month
+    for (var record in records) {
+      String month = record.date.substring(0, 7); // Extract month from date
+      double sales = record.price;
+
+      if (monthlySales.containsKey(month)) {
+        monthlySales[month] = (monthlySales[month] ?? 0) + sales;
+      } else {
+        monthlySales[month] = sales;
+      }
+    }
+
+    // Create SalesData objects for each month
+    List<SalesData> monthlySalesData = monthlySales.entries.map((entry) {
+      String month = entry.key;
+      double sales = entry.value;
+      return SalesData(month, sales);
+    }).toList();
+
+    return monthlySalesData;
+  }
+
+ static double getTotalGrossPrice(List<ProductionRecordModel> records) {
+    double totalGrossPrice = 0;
+
+    for (var record in records) {
+      totalGrossPrice += record.price;
+    }
+
+    return totalGrossPrice;
+  }
 }
+
+
+
 extension ProductionRecordModelExtension on ProductionRecordModel {
   double get price {
     double price = 50 * double.parse(liter) + (double.parse(clr) / 4) + double.parse(fat) + double.parse(snf);
     return price;
   }
+
+  
 }

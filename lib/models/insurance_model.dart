@@ -9,7 +9,7 @@ class InsuranceModel {
   String causeOfDeath;
   String descriptionOfIncident;
   String typeOfCoverageRequested;
-  
+  String status;
 
   InsuranceModel({
     required this.uid,
@@ -22,20 +22,22 @@ class InsuranceModel {
     required this.causeOfDeath,
     required this.descriptionOfIncident,
     required this.typeOfCoverageRequested,
+    this.status = 'Pending',
   });
 
   factory InsuranceModel.fromJson(Map<String, dynamic> json) {
     return InsuranceModel(
-      uid: json['uid'],
-      supplierId: json['supplierId'],
-      name: json['name'],
-      address: json['address'],
-      numCowsInsured: json['numCowsInsured'],
-      numCowsAffected: json['numCowsAffected'],
-      dateOfIncident: json['dateOfIncident'],
-      causeOfDeath: json['causeOfDeath'],
-      descriptionOfIncident: json['descriptionOfIncident'],
-      typeOfCoverageRequested: json['typeOfCoverageRequested'],
+      uid: json['uid'] ?? "",
+      supplierId: json['supplierId'] ?? '',
+      name: json['name'] ?? "",
+      address: json['address'] ?? "",
+      numCowsInsured: json['numCowsInsured'] ?? "",
+      numCowsAffected: json['numCowsAffected'] ?? "",
+      dateOfIncident: json['dateOfIncident'] ?? "",
+      causeOfDeath: json['causeOfDeath'] ?? "",
+      descriptionOfIncident: json['descriptionOfIncident'] ?? '',
+      typeOfCoverageRequested: json['typeOfCoverageRequested'] ?? '',
+      status: json['status'] ?? 'Pending',
     );
   }
 
@@ -51,6 +53,7 @@ class InsuranceModel {
       'causeOfDeath': causeOfDeath,
       'descriptionOfIncident': descriptionOfIncident,
       'typeOfCoverageRequested': typeOfCoverageRequested,
+      'status': status,
     };
   }
 }

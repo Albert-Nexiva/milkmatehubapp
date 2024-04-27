@@ -23,6 +23,18 @@ class FirestoreDB {
     }
   }
 
+  Future<void> addFeedback(FeedbackModel feedback) async {
+    try {
+      final data = await db
+          .collection('feedbackCollection')
+          .doc(feedback.feedbackId)
+          .set(feedback.toJson());
+      return data;
+    } catch (e) {
+      throw Exception('Error adding feedback: $e');
+    }
+  }
+
   Future<void> addInsuranceApplication(InsuranceModel record) async {
     try {
       final data = await db
@@ -70,28 +82,18 @@ class FirestoreDB {
       throw Exception('Error adding user: $e');
     }
   }
-  Future<void>addFeedback(FeedbackModel feedback) async {
+
+  Future<void> approveInsuranceClaim(String claimId) async {
     try {
-      final data = await db
-          .collection('feedbackCollection')
-          .doc(feedback.feedbackId)
-          .set(feedback.toJson());
-      return data;
+      await db.collection('insuranceCollection').doc(claimId).update({
+        'status': 'approved',
+      });
+      return;
     } catch (e) {
-      throw Exception('Error adding feedback: $e');
+      throw Exception('Error approving insurance claim: $e');
     }
   }
-Future<void> updateUserSubscription (UserModel user) async {
-    try {
-      final data = await db
-          .collection('userCollection')
-          .doc(user.uid)
-          .update(user.toJson());
-      return data;
-    } catch (e) {
-      throw Exception('Error updating user: $e');
-    }
-  }
+
   Future<void> cancelOrder(String orderId) async {
     try {
       await db.collection('orderCollection').doc(orderId).delete();
@@ -189,6 +191,17 @@ Future<void> updateUserSubscription (UserModel user) async {
     }
   }
 
+  Future<List<InsuranceModel>> getInsuranceClaims() async {
+    try {
+      final snapshot = await db.collection('insuranceCollection').get();
+      return snapshot.docs
+          .map((doc) => InsuranceModel.fromJson(doc.data()))
+          .toList();
+    } catch (e) {
+      throw Exception('Error getting insurance claims: $e');
+    }
+  }
+
   Future<List<OrderModel>> getMyOrders() async {
     try {
       CacheStorageService cacheStorageService = CacheStorageService();
@@ -251,6 +264,26 @@ Future<void> updateUserSubscription (UserModel user) async {
       return data;
     } catch (e) {
       throw Exception('Error placing order: $e');
+    }
+  }
+
+  Future<void> rejectInsuranceClaim(String claimId) async {
+    try {
+      await db.collection('insuranceCollection').doc(claimId).delete();
+    } catch (e) {
+      throw Exception('Error rejecting insurance claim: $e');
+    }
+  }
+
+  Future<void> updateUserSubscription(UserModel user) async {
+    try {
+      final data = await db
+          .collection('userCollection')
+          .doc(user.uid)
+          .update(user.toJson());
+      return data;
+    } catch (e) {
+      throw Exception('Error updating user: $e');
     }
   }
 }

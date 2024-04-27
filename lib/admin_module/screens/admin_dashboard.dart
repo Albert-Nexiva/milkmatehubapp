@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:milkmatehub/admin_module/screens/feed_management/feed_management_tab.dart';
+import 'package:milkmatehub/admin_module/screens/insurance_management.dart';
 import 'package:milkmatehub/admin_module/screens/production_screen.dart';
 import 'package:milkmatehub/admin_module/screens/supplier_management_screen.dart';
 import 'package:milkmatehub/screens/dashboard_screen.dart';
@@ -57,14 +58,15 @@ class AdminDashboardScreen extends StatelessWidget {
                                   const SupplierManagementScreen()));
                         },
                       ),
-                      // buildGridItem(
-                      //   icon: Icons.local_hospital,
-                      //   label: 'Insurance management',
-                      //   onTap: () {
-                      //     Navigator.of(context).push(MaterialPageRoute(
-                      //         builder: (context) => const FeedOrderScreen()));
-                      //   },
-                      // ),
+                      buildGridItem(
+                        icon: Icons.local_hospital,
+                        label: 'Insurance management',
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  const InsuranceManagement()));
+                        },
+                      ),
                     ]),
               ),
             ],
