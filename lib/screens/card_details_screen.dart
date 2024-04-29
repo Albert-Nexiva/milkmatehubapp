@@ -8,6 +8,7 @@ import 'package:milkmatehub/models/order_model.dart';
 import 'package:milkmatehub/models/supplier_model.dart';
 import 'package:milkmatehub/screens/dashboard_screen.dart';
 import 'package:milkmatehub/screens/feed_order_screen.dart';
+import 'package:milkmatehub/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 class CardDetailsScreen extends HookWidget {
@@ -123,7 +124,7 @@ class CardDetailsScreen extends HookWidget {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const DashboardScreen(),
+                                                    const HomeScreen(),
                                               ),
                                               (route) => false,
                                             ),

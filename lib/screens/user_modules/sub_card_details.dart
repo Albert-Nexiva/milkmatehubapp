@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:milkmatehub/screens/dashboard_screen.dart';
+import 'package:milkmatehub/screens/home_screen.dart';
 
 class SubCardDetailsScreen extends HookWidget {
   const SubCardDetailsScreen({
@@ -102,7 +102,7 @@ class SubCardDetailsScreen extends HookWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const DashboardScreen(),
+                                            const HomeScreen(),
                                       ),
                                       (route) => false,
                                     );
