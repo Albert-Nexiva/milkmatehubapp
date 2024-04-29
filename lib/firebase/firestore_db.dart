@@ -3,6 +3,7 @@ import 'package:milkmatehub/local_storage/key_value_storage_service.dart';
 import 'package:milkmatehub/models/feed_model.dart';
 import 'package:milkmatehub/models/feedback_model.dart';
 import 'package:milkmatehub/models/insurance_model.dart';
+import 'package:milkmatehub/models/notification_model.dart';
 import 'package:milkmatehub/models/order_model.dart';
 import 'package:milkmatehub/models/production_record_model.dart';
 import 'package:milkmatehub/models/supplier_model.dart';
@@ -20,6 +21,23 @@ class FirestoreDB {
       return data;
     } catch (e) {
       throw Exception('Error adding feed: $e');
+    }
+  }
+
+  Future<void> storeNotifications(
+    String uID,
+    NotificationModel notification,
+  ) async {
+    try {
+      await db
+          .collection('notifications')
+          .doc(uID)
+          .collection('user')
+          .add(notification.toJson());
+
+      return;
+    } catch (e) {
+      throw Exception('Error getting user: $e');
     }
   }
 
@@ -240,6 +258,26 @@ class FirestoreDB {
       return snapshot.data();
     } catch (e) {
       throw Exception('Error getting supplier: $e');
+    }
+  }
+
+  Future<List> getUserNotifications(String uId) async {
+    try {
+      final snapshot = await db
+          .collection('notifications')
+          .doc(uId)
+          .collection('user')
+          .get();
+      final allData = snapshot.docs
+          .map((doc) => NotificationModel(
+              description: doc.data()['description'],
+              title: doc.data()['title'],
+              docId: doc.id))
+          .toList();
+      print(allData);
+      return allData;
+    } catch (e) {
+      throw Exception('Error getting user: $e');
     }
   }
 
