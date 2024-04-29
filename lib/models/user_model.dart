@@ -54,19 +54,4 @@ class UserModel {
       'fcm': fcm
     };
   }
-
-  static fromJson(jsonDecode) {
-    return UserModel(
-        name: jsonDecode['name'] ?? "",
-        address: jsonDecode['address'] ?? "",
-        phoneNumber: jsonDecode['phoneNumber'] ?? "",
-        city: jsonDecode['city'] ?? "",
-        consumptionType: jsonDecode['consumptionType'] ?? "",
-        quantity: jsonDecode['quantity'] ?? "",
-        deliveryType: jsonDecode['deliveryType'] ?? "",
-        email: jsonDecode['email'] ?? "",
-        uid: jsonDecode['uid'] ?? "",
-        type: jsonDecode['type'] ?? "user",
-        fcm: jsonDecode['fcm'] ?? "");
-  }
 }
