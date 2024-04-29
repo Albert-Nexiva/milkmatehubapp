@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:milkmatehub/api/firebase_messaging_api.dart';
 import 'package:milkmatehub/constants/methods.dart';
 import 'package:milkmatehub/firebase/firestore_db.dart';
 import 'package:milkmatehub/models/insurance_model.dart';
@@ -132,11 +133,17 @@ class _InsuranceManagementState extends State<InsuranceManagement> {
                                             FirestoreDB()
                                                 .rejectInsuranceClaim(
                                                     record.uid)
-                                                .then((value) => setState(() {
-                                                      isLoading = false;
-                                                      futureMethod = FirestoreDB()
-                                                          .getInsuranceClaims();
-                                                    }));
+                                                .then((value) => {
+                                                      sendNotificationToUser(
+                                                          record.supplierId,
+                                                          "Insurance Claim Rejected",
+                                                          "We regret to inform you that your request for the insurance claim has been rejected due to internal policies."),
+                                                      setState(() {
+                                                        isLoading = false;
+                                                        futureMethod = FirestoreDB()
+                                                            .getInsuranceClaims();
+                                                      })
+                                                    });
                                           } on Exception catch (_) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
@@ -177,13 +184,19 @@ class _InsuranceManagementState extends State<InsuranceManagement> {
                                                   FirestoreDB()
                                                       .approveInsuranceClaim(
                                                           record.uid)
-                                                      .then((value) =>
-                                                          setState(() {
-                                                            isLoading = false;
-                                                            futureMethod =
-                                                                FirestoreDB()
-                                                                    .getInsuranceClaims();
-                                                          }));
+                                                      .then((value) => {
+                                                            sendNotificationToUser(
+                                                                record
+                                                                    .supplierId,
+                                                                "Insurance Claim Approved",
+                                                                "Hello ${record.name} your insurance claim has been approved successfully."),
+                                                            setState(() {
+                                                              isLoading = false;
+                                                              futureMethod =
+                                                                  FirestoreDB()
+                                                                      .getInsuranceClaims();
+                                                            })
+                                                          });
                                                 } on Exception catch (_) {
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(

@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:milkmatehub/firebase/firestore_db.dart';
 import 'package:milkmatehub/models/notification_model.dart';
+import 'package:milkmatehub/models/supplier_model.dart';
 import 'package:milkmatehub/notification_helper.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -93,11 +94,13 @@ Future<void> sendNotificationToDb(String uId, NotificationModel data) async {
 }
 
 Future<void> sendNotificationToUser(
-    String uid, String title, String body, bool flag) async {
-  final user = await FirestoreDB().getUser(uid, flag);
-  String? userToken = user?['fcm'] ?? "";
+    String uid, String title, String body) async {
+  final user = await FirestoreDB().getSupplier(uid);
+  print('user $uid');
+  String? userToken = user?["fcm"].toString() ?? "";
+  print('token : $userToken');
   const String serverKey =
-      'AAAAlerv9s0:APA91bHmGnDFTlwZC3D6_pVgpy0-6NjD3niDIc-VQa0VB5HJ7lhZLSznP6Ezv2PXpPz0AOl9Q05Y-gFAIE1TDWvTp718q7zuMPbuA5BDIZhgunMSeX-Gky0n7dFxEV_5AT414P-6PNJu';
+      'AAAARcgqELk:APA91bEdy3BgW1vi2VkrsFnNxGYn2wk_TVcaov5OiRdsVrdAElAXrf-I0qtr6W1oeT10vALoaZYreWO5lVmh_sNL3P17YoVSS_8HmqQw0ZrPKU2VDVy4cHSYj_A8M33MNjg2luBPNcAO';
   const String fcmUrl = 'https://fcm.googleapis.com/fcm/send';
 
   final headers = {

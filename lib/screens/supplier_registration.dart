@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:milkmatehub/firebase/firestore_db.dart';
 import 'package:milkmatehub/local_storage/key_value_storage_service.dart';
@@ -41,6 +42,20 @@ class SupplierRegistrationState extends State<SupplierRegistration> {
   bool addCow = false;
   bool declared = false;
   final _formKey = GlobalKey<FormState>();
+  String fcmToken = '';
+  @override
+  void initState() {
+    super.initState();
+    loadSettings();
+  }
+
+  void loadSettings() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    setState(() {
+      fcmToken = token.toString();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -450,45 +465,43 @@ class SupplierRegistrationState extends State<SupplierRegistration> {
                   ElevatedButton(
                     onPressed: declared
                         ? () {
-                          if(  _cowList.length <
-                                    int.parse(_cowCountController.text)
-                     ){
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Please add all the cows',
+                            if (_cowList.length <
+                                int.parse(_cowCountController.text)) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Please add all the cows',
+                                  ),
                                 ),
-                              ),
-                            );
-                     }else
-                            if (_formKey.currentState!.validate()) {
+                              );
+                            } else if (_formKey.currentState!.validate()) {
                               setState(() {
                                 isLoading = true;
                               });
 
                               final supplierModel = SupplierModel(
-                                type: "supplier",
-                                uid: widget.user.uid,
-                                name: _nameController.text,
-                                address: _addressController.text,
-                                phoneNumber: _phoneController.text,
-                                city: _cityController.text,
-                                numberOfCows:
-                                    int.parse(_cowCountController.text),
-                                cows: _cowList.map((cow) => cow).toList(),
-                                experienceYears:
-                                    int.parse(_experienceController.text),
-                                bank: Bank(
-                                  accountNumber:
-                                      _bankAccountNumberController.text,
-                                  branch: _bankBranchController.text,
-                                  ifsc: _bankIFSCController.text,
-                                  bankName: _bankNameController.text,
-                                ),
-                                insuranceCoverage:
-                                    _insuranceCoverageController.text,
-                                email: widget.user.email!,
-                              );
+                                  type: "supplier",
+                                  uid: widget.user.uid,
+                                  name: _nameController.text,
+                                  address: _addressController.text,
+                                  phoneNumber: _phoneController.text,
+                                  city: _cityController.text,
+                                  numberOfCows:
+                                      int.parse(_cowCountController.text),
+                                  cows: _cowList.map((cow) => cow).toList(),
+                                  experienceYears:
+                                      int.parse(_experienceController.text),
+                                  bank: Bank(
+                                    accountNumber:
+                                        _bankAccountNumberController.text,
+                                    branch: _bankBranchController.text,
+                                    ifsc: _bankIFSCController.text,
+                                    bankName: _bankNameController.text,
+                                  ),
+                                  insuranceCoverage:
+                                      _insuranceCoverageController.text,
+                                  email: widget.user.email!,
+                                  fcm: fcmToken);
 
                               FirestoreDB()
                                   .addSupplier(supplierModel)

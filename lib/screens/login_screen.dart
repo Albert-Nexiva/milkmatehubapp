@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:milkmatehub/admin_module/screens/admin_login.dart';
@@ -92,14 +93,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   }, onError: (Object error, StackTrace stackTrace) {
                     if (error == 'invalid-credential') {
                       if (context.mounted) {
-                        setState(() {
-                          isLoading.value = false;
-                        });
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Invalid User!'),
                           ),
                         );
+                        isLoading.value = false;
                       }
                     } else if (error == 'wrong-password') {
                       if (context.mounted) {
@@ -108,9 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             content: Text('Incorrect Password!'),
                           ),
                         );
-                        setState(() {
-                          isLoading.value = false;
-                        });
+                        isLoading.value = false;
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -118,9 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           content: Text('Invalid User!'),
                         ),
                       );
-                      setState(() {
-                        isLoading.value = false;
-                      });
+                      isLoading.value = false;
                     }
                   }, cancelOnError: true);
                 });
@@ -201,6 +196,15 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    loadSettings();
+  }
+
+  String fcmToken = "";
+  void loadSettings() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    setState(() {
+      fcmToken = token.toString();
+    });
   }
 
   Future<void> saveAndNavigate(
@@ -214,6 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 .setAuthUser(user: UserModel.fromJson(value));
 
         if (context.mounted && isCached) {
+          await FirestoreDB().updateFcmToken(user.uid, fcmToken, isSupplier);
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const HomeScreen()),
           );

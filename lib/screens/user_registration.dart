@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:milkmatehub/firebase/firestore_db.dart';
 import 'package:milkmatehub/local_storage/key_value_storage_service.dart';
@@ -22,7 +23,7 @@ class UserDetailsRegistrationState extends State<UserDetailsRegistration> {
   final TextEditingController _quantityController = TextEditingController();
   String _selectedConsumptionType = 'Household';
   String _selectedDeliveryType = 'Daily';
-
+  String fcmToken = '';
   final firestoreDB = FirebaseFirestore.instance;
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
@@ -123,6 +124,7 @@ class UserDetailsRegistrationState extends State<UserDetailsRegistration> {
                             });
                             final userModel = UserModel(
                               type: 'user',
+                              fcm: fcmToken,
                               name: _nameController.text,
                               email: widget.user.email!,
                               address: _addressController.text,
@@ -186,6 +188,14 @@ class UserDetailsRegistrationState extends State<UserDetailsRegistration> {
   @override
   void initState() {
     super.initState();
+    loadSettings();
+  }
+
+  void loadSettings() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    setState(() {
+      fcmToken = token.toString();
+    });
   }
 
   // Validator for not empty fields

@@ -24,6 +24,30 @@ class FirestoreDB {
     }
   }
 
+  Future<void> updateFcmToken(String uId, String token, bool flag) async {
+    if (flag) {
+      try {
+        final data = await db
+            .collection('supplierCollection')
+            .doc(uId)
+            .update({"fcm": token});
+        return data;
+      } catch (e) {
+        throw Exception('Error updating booking status: $e');
+      }
+    } else {
+      try {
+        final data = await db
+            .collection('userCollection')
+            .doc(uId)
+            .update({"fcm": token});
+        return data;
+      } catch (e) {
+        throw Exception('Error updating booking status: $e');
+      }
+    }
+  }
+
   Future<void> storeNotifications(
     String uID,
     NotificationModel notification,
