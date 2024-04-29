@@ -9,7 +9,7 @@ class UserModel {
   String email;
   String uid;
   String type;
-
+  String? fcm;
   UserModel({
     required this.name,
     required this.address,
@@ -20,6 +20,7 @@ class UserModel {
     required this.deliveryType,
     required this.email,
     required this.uid,
+    this.fcm,
     this.type = "user",
   });
 
@@ -50,6 +51,22 @@ class UserModel {
       'email': email,
       'uid': uid,
       'type': type,
+      'fcm': fcm
     };
+  }
+
+  static fromJson(jsonDecode) {
+    return UserModel(
+        name: jsonDecode['name'] ?? "",
+        address: jsonDecode['address'] ?? "",
+        phoneNumber: jsonDecode['phoneNumber'] ?? "",
+        city: jsonDecode['city'] ?? "",
+        consumptionType: jsonDecode['consumptionType'] ?? "",
+        quantity: jsonDecode['quantity'] ?? "",
+        deliveryType: jsonDecode['deliveryType'] ?? "",
+        email: jsonDecode['email'] ?? "",
+        uid: jsonDecode['uid'] ?? "",
+        type: jsonDecode['type'] ?? "user",
+        fcm: jsonDecode['fcm'] ?? "");
   }
 }

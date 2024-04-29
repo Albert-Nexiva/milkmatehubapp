@@ -75,21 +75,22 @@ class SupplierModel {
   String email;
   String uid;
   String type = "supplier";
+  String? fcm;
 
-  SupplierModel({
-    required this.name,
-    required this.address,
-    required this.phoneNumber,
-    required this.city,
-    required this.numberOfCows,
-    required this.cows,
-    required this.experienceYears,
-    required this.bank,
-    required this.insuranceCoverage,
-    required this.email,
-    required this.uid,
-    required this.type,
-  });
+  SupplierModel(
+      {required this.name,
+      required this.address,
+      required this.phoneNumber,
+      required this.city,
+      required this.numberOfCows,
+      required this.cows,
+      required this.experienceYears,
+      required this.bank,
+      required this.insuranceCoverage,
+      required this.email,
+      required this.uid,
+      required this.type,
+      this.fcm});
 
   Map<String, dynamic> toJson() {
     return {
@@ -105,25 +106,26 @@ class SupplierModel {
       'email': email,
       'uid': uid,
       'type': type,
+      'fcm': fcm
     };
   }
 
   static SupplierModel fromJson(jsonDecode) {
     return SupplierModel(
-      name: jsonDecode['name'] ?? "",
-      address: jsonDecode['address'] ?? "",
-      phoneNumber: jsonDecode['phoneNumber'] ?? "",
-      city: jsonDecode['city'] ?? "",
-      numberOfCows: jsonDecode['numberOfCows'] ?? 0,
-      cows: (jsonDecode['cows'] as List<dynamic>)
-          .map((cow) => Cow.fromJson(cow))
-          .toList(),
-      experienceYears: jsonDecode['experienceYears'] ?? 0,
-      bank: Bank.fromJson(jsonDecode['bank'] ?? {}),
-      insuranceCoverage: jsonDecode['insuranceCoverage'] ?? "",
-      email: jsonDecode['email'] ?? "",
-      uid: jsonDecode['uid'] ?? "",
-      type: jsonDecode['type'] ?? "supplier",
-    );
+        name: jsonDecode['name'] ?? "",
+        address: jsonDecode['address'] ?? "",
+        phoneNumber: jsonDecode['phoneNumber'] ?? "",
+        city: jsonDecode['city'] ?? "",
+        numberOfCows: jsonDecode['numberOfCows'] ?? 0,
+        cows: (jsonDecode['cows'] as List<dynamic>)
+            .map((cow) => Cow.fromJson(cow))
+            .toList(),
+        experienceYears: jsonDecode['experienceYears'] ?? 0,
+        bank: Bank.fromJson(jsonDecode['bank'] ?? {}),
+        insuranceCoverage: jsonDecode['insuranceCoverage'] ?? "",
+        email: jsonDecode['email'] ?? "",
+        uid: jsonDecode['uid'] ?? "",
+        type: jsonDecode['type'] ?? "supplier",
+        fcm: jsonDecode['fcm']);
   }
 }
