@@ -92,12 +92,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   }, onError: (Object error, StackTrace stackTrace) {
                     if (error == 'invalid-credential') {
                       if (context.mounted) {
+                        setState(() {
+                          isLoading.value = false;
+                        });
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Invalid User!'),
                           ),
                         );
-                        isLoading.value = false;
                       }
                     } else if (error == 'wrong-password') {
                       if (context.mounted) {
@@ -106,7 +108,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             content: Text('Incorrect Password!'),
                           ),
                         );
-                        isLoading.value = false;
+                        setState(() {
+                          isLoading.value = false;
+                        });
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -114,7 +118,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           content: Text('Invalid User!'),
                         ),
                       );
-                      isLoading.value = false;
+                      setState(() {
+                        isLoading.value = false;
+                      });
                     }
                   }, cancelOnError: true);
                 });
