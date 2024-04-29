@@ -243,6 +243,17 @@ class FirestoreDB {
     }
   }
 
+  Future<List<UserModel>> getSubscriptions() async {
+    try {
+      final snapshot = await db.collection('userCollection').get();
+      return snapshot.docs
+          .map((doc) => UserModel.fromJson(doc.data()))
+          .toList();
+    } catch (e) {
+      throw Exception('Error getting supplier: $e');
+    }
+  }
+
   Future<Map<String, dynamic>?> getUser(String uid, bool isSupplier) async {
     try {
       final snapshot = await db

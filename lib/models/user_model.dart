@@ -23,6 +23,21 @@ class UserModel {
     this.type = "user",
   });
 
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      name: json['name'],
+      address: json['address'],
+      phoneNumber: json['phoneNumber'],
+      city: json['city'],
+      consumptionType: json['consumptionType'],
+      quantity: json['quantity'],
+      deliveryType: json['deliveryType'],
+      email: json['email'],
+      uid: json['uid'],
+      type: json['type'] ?? 'user',
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -36,20 +51,5 @@ class UserModel {
       'uid': uid,
       'type': type,
     };
-  }
-
-  static fromJson(jsonDecode) {
-    return UserModel(
-      name: jsonDecode['name'] ?? "",
-      address: jsonDecode['address'] ?? "",
-      phoneNumber: jsonDecode['phoneNumber'] ?? "",
-      city: jsonDecode['city'] ?? "",
-      consumptionType: jsonDecode['consumptionType'] ?? "",
-      quantity: jsonDecode['quantity'] ?? "",
-      deliveryType: jsonDecode['deliveryType'] ?? "",
-      email: jsonDecode['email'] ?? "",
-      uid: jsonDecode['uid'] ?? "",
-      type: jsonDecode['type'] ?? "user",
-    );
   }
 }

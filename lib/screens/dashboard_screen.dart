@@ -7,6 +7,7 @@ import 'package:milkmatehub/screens/insurance_screen.dart';
 import 'package:milkmatehub/screens/production_records_tab.dart';
 import 'package:milkmatehub/screens/sales_summary.dart';
 import 'package:milkmatehub/screens/user_modules/feedback.dart';
+import 'package:milkmatehub/screens/user_modules/payments.dart';
 import 'package:milkmatehub/screens/user_modules/subscriptions.dart';
 
 Widget buildGridItem(
@@ -147,9 +148,10 @@ class DashboardScreen extends StatelessWidget {
                                           icon: Icons.payment,
                                           label: 'Payments',
                                           onTap: () {
-                                            // Navigator.of(context).push(MaterialPageRoute(
-                                            //     builder: (context) =>
-                                            //         const ProductionRecordTabScreen()));
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const UserPayments()));
                                           },
                                         ),
                                       ]),
