@@ -214,7 +214,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                                       isLoading = false;
                                                     });
                                                   });
-                                                } on Exception catch (e) {
+                                                } on Exception catch (_) {
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
                                                     const SnackBar(

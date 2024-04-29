@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:milkmatehub/constants/methods.dart';
-import 'package:milkmatehub/firebase/firestore_db.dart';
-import 'package:milkmatehub/local_storage/key_value_storage_service.dart';
-import 'package:milkmatehub/models/order_model.dart';
-import 'package:milkmatehub/models/supplier_model.dart';
-import 'package:milkmatehub/screens/dashboard_screen.dart';
-import 'package:milkmatehub/screens/feed_order_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:milkmatehub/screens/home_screen.dart';
 
 class SubCardDetailsScreen extends HookWidget {
   const SubCardDetailsScreen({
@@ -24,9 +17,7 @@ class SubCardDetailsScreen extends HookWidget {
 
     final isCvvFocused = useState(false);
     final formKey = GlobalKey<FormState>();
-    final cartProvider = Provider.of<CartProvider>(context, listen: true);
-    final items = cartProvider.items;
-    CacheStorageService cacheStorageService = CacheStorageService();
+
     final isLoading = useState(false);
     return Scaffold(
       appBar: AppBar(
@@ -98,36 +89,24 @@ class SubCardDetailsScreen extends HookWidget {
                             ),
                             onPressed: () async {
                               if (formKey.currentState!.validate()) {
-                                final SupplierModel user =
-                                    await cacheStorageService.getAuthUser();
                                 try {
                                   isLoading.value = true;
-                                  FirestoreDB()
-                                      .placeOrder(OrderModel(
-                                        orderId: generateRandomString(),
-                                        supplierId: user.uid,
-                                        orderDate: DateTime.now(),
-                                        feeds: items,
-                                        status: OrderStatus.pending,
-                                      ))
-                                      .then((value) => {
-                                            cartProvider.clearCart(),
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                content: Text(
-                                                    'Payment Successful'),
-                                              ),
-                                            ),
-                                            Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const DashboardScreen(),
-                                              ),
-                                              (route) => false,
-                                            ),
-                                          });
+
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Payment Successful'),
+                                      ),
+                                    );
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const HomeScreen(),
+                                      ),
+                                      (route) => false,
+                                    );
+                                  }
                                 } catch (e) {
                                   if (context.mounted) {
                                     isLoading.value = false;
