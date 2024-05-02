@@ -6,7 +6,6 @@ import 'package:milkmatehub/firebase/firestore_db.dart';
 import 'package:milkmatehub/local_storage/key_value_storage_service.dart';
 import 'package:milkmatehub/models/order_model.dart';
 import 'package:milkmatehub/models/supplier_model.dart';
-import 'package:milkmatehub/screens/dashboard_screen.dart';
 import 'package:milkmatehub/screens/feed_order_screen.dart';
 import 'package:milkmatehub/screens/home_screen.dart';
 import 'package:provider/provider.dart';
@@ -18,11 +17,14 @@ class CardDetailsScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cardNumberController = useTextEditingController();
+    final expiryDateController = useTextEditingController();
+    final cardHolderNameController = useTextEditingController();
+    final cvvCodeController = useTextEditingController();
     final cardNumber = useState('');
     final expiryDate = useState('');
     final cardHolderName = useState('');
     final cvvCode = useState('');
-
     final isCvvFocused = useState(false);
     final formKey = GlobalKey<FormState>();
     final cartProvider = Provider.of<CartProvider>(context, listen: true);
@@ -46,48 +48,85 @@ class CardDetailsScreen extends HookWidget {
                       expiryDate: expiryDate.value,
                       cardHolderName: cardHolderName.value,
                       cvvCode: cvvCode.value,
+                      cardType: CardType.visa,
+                      isHolderNameVisible: true,
+                      isChipVisible: true,
                       showBackView: isCvvFocused.value,
-                      onCreditCardWidgetChange: (CreditCardBrand brand) {
-                        // Callback for anytime credit card brand is changed
-                      },
+                      onCreditCardWidgetChange: (CreditCardBrand brand) {},
                     ),
                     const Divider(),
-                    CreditCardForm(
-                      formKey: formKey,
-                      obscureCvv: true,
-                      obscureNumber: false,
-                      cardNumber: cardNumber.value,
-                      cvvCode: cvvCode.value,
-                      isHolderNameVisible: true,
-                      isCardNumberVisible: true,
-                      isExpiryDateVisible: true,
-                      cardHolderName: cardHolderName.value,
-                      expiryDate: expiryDate.value,
-                      inputConfiguration: const InputConfiguration(
-                        cardNumberDecoration: InputDecoration(
-                          labelText: 'Number',
-                          hintText: 'XXXX XXXX XXXX XXXX',
-                        ),
-                        expiryDateDecoration: InputDecoration(
-                          labelText: 'Expired Date',
-                          hintText: 'XX/XX',
-                        ),
-                        cvvCodeDecoration: InputDecoration(
-                          labelText: 'CVV',
-                          hintText: 'XXX',
-                        ),
-                        cardHolderDecoration: InputDecoration(
-                          labelText: 'Card Holder',
-                        ),
+                    Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            controller: cardNumberController,
+                            decoration: const InputDecoration(
+                              labelText: 'Card Number',
+                            ),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return 'Please enter card number';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
+                            controller: expiryDateController,
+                            decoration: const InputDecoration(
+                              labelText: 'Expiry Date',
+                              hintText: 'MM/YY',
+                            ),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return 'Please enter expiry date';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
+                            controller: cardHolderNameController,
+                            decoration: const InputDecoration(
+                              labelText: 'Cardholder Name',
+                            ),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return 'Please enter cardholder name';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
+                            controller: cvvCodeController,
+                            decoration: const InputDecoration(
+                              labelText: 'CVV Code',
+                            ),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return 'Please enter CVV code';
+                              }
+                              return null;
+                            },
+                          ),
+                          Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.all(8),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  FocusScope.of(context).unfocus();
+                                  cardNumber.value = cardNumberController.text;
+                                  expiryDate.value = expiryDateController.text;
+                                  cardHolderName.value =
+                                      cardHolderNameController.text;
+                                  cvvCode.value = cvvCodeController.text;
+                                }
+                              },
+                              child: const Text('Verify Card'),
+                            ),
+                          ),
+                        ],
                       ),
-                      onCreditCardModelChange:
-                          (CreditCardModel creditCardModel) {
-                        cardNumber.value = creditCardModel.cardNumber;
-                        expiryDate.value = creditCardModel.expiryDate;
-                        cardHolderName.value = creditCardModel.cardHolderName;
-                        cvvCode.value = creditCardModel.cvvCode;
-                        isCvvFocused.value = creditCardModel.isCvvFocused;
-                      },
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -124,7 +163,9 @@ class CardDetailsScreen extends HookWidget {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const HomeScreen(),
+                                                    HomeScreen(
+                                                  user: user,
+                                                ),
                                               ),
                                               (route) => false,
                                             ),

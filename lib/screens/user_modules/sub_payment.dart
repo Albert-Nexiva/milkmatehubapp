@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:milkmatehub/screens/dashboard_screen.dart';
+import 'package:milkmatehub/local_storage/key_value_storage_service.dart';
+import 'package:milkmatehub/models/user_model.dart';
 import 'package:milkmatehub/screens/home_screen.dart';
 import 'package:milkmatehub/screens/user_modules/sub_card_details.dart';
 
@@ -69,7 +70,7 @@ class SubPaymentScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isLoading = useState(false);
-
+  CacheStorageService cacheStorageService = CacheStorageService();
     final paymentType = useState<PaymentMethod>(PaymentMethod.cashOnDelivery);
     return Scaffold(
       appBar: AppBar(
@@ -153,6 +154,8 @@ class SubPaymentScreen extends HookWidget {
                               );
                             } else {
                               isLoading.value = true;
+                                  final UserModel user =
+                                  await cacheStorageService.getAuthUser();
                               try {
                                 isLoading.value = false;
 
@@ -160,8 +163,9 @@ class SubPaymentScreen extends HookWidget {
                                   Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                           HomeScreen(),
+                                      builder: (context) =>  HomeScreen(
+                                        user:user ,
+                                      ),
                                     ),
                                     (route) => false,
                                   );

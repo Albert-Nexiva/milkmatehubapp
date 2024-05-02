@@ -222,7 +222,9 @@ class PaymentScreen extends HookWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          const HomeScreen(),
+                                           HomeScreen(
+                                            user: user,
+                                          ),
                                     ),
                                     (route) => false,
                                   );

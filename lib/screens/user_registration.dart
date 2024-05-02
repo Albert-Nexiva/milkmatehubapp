@@ -152,7 +152,9 @@ class UserDetailsRegistrationState extends State<UserDetailsRegistration> {
                               if (context.mounted) {
                                 Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
-                                    builder: (context) => const HomeScreen(),
+                                    builder: (context) =>  HomeScreen(
+                                      user: userModel,
+                                    ),
                                   ),
                                   (route) => false,
                                 );

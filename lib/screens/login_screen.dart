@@ -219,9 +219,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
         if (context.mounted && isCached) {
           await FirestoreDB().updateFcmToken(user.uid, fcmToken, isSupplier);
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
+      if(context.mounted)   { Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) =>  HomeScreen( user: value['type'] == 'supplier'
+                          ? SupplierModel.fromJson(value)
+                          : UserModel.fromJson(value),)),
+          );}
         }
       }
     });

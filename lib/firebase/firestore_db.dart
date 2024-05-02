@@ -24,47 +24,6 @@ class FirestoreDB {
     }
   }
 
-  Future<void> updateFcmToken(String uId, String token, bool flag) async {
-    if (flag) {
-      try {
-        final data = await db
-            .collection('supplierCollection')
-            .doc(uId)
-            .update({"fcm": token});
-        return data;
-      } catch (e) {
-        throw Exception('Error updating booking status: $e');
-      }
-    } else {
-      try {
-        final data = await db
-            .collection('userCollection')
-            .doc(uId)
-            .update({"fcm": token});
-        return data;
-      } catch (e) {
-        throw Exception('Error updating booking status: $e');
-      }
-    }
-  }
-
-  Future<void> storeNotifications(
-    String uID,
-    NotificationModel notification,
-  ) async {
-    try {
-      await db
-          .collection('notifications')
-          .doc(uID)
-          .collection('user')
-          .add(notification.toJson());
-
-      return;
-    } catch (e) {
-      throw Exception('Error getting user: $e');
-    }
-  }
-
   Future<void> addFeedback(FeedbackModel feedback) async {
     try {
       final data = await db
@@ -276,12 +235,35 @@ class FirestoreDB {
     }
   }
 
+  Future<List<UserModel>> getSubscriptions() async {
+    try {
+      final snapshot = await db.collection('userCollection').get();
+      return snapshot.docs
+          .map((doc) => UserModel.fromJson(doc.data()))
+          .toList();
+    } catch (e) {
+      throw Exception('Error getting supplier: $e');
+    }
+  }
+
   Future<Map<String, dynamic>?> getSupplier(String uid) async {
     try {
       final snapshot = await db.collection('supplierCollection').doc(uid).get();
       return snapshot.data();
     } catch (e) {
       throw Exception('Error getting supplier: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>?> getUser(String uid, bool isSupplier) async {
+    try {
+      final snapshot = await db
+          .collection(isSupplier ? 'supplierCollection' : 'userCollection')
+          .doc(uid)
+          .get();
+      return snapshot.data();
+    } catch (e) {
+      throw Exception('Error getting user: $e');
     }
   }
 
@@ -305,35 +287,16 @@ class FirestoreDB {
     }
   }
 
-  Future<List<UserModel>> getSubscriptions() async {
-    try {
-      final snapshot = await db.collection('userCollection').get();
-      return snapshot.docs
-          .map((doc) => UserModel.fromJson(doc.data()))
-          .toList();
-    } catch (e) {
-      throw Exception('Error getting supplier: $e');
-    }
-  }
-
-  Future<Map<String, dynamic>?> getUser(String uid, bool isSupplier) async {
-    try {
-      final snapshot = await db
-          .collection(isSupplier ? 'supplierCollection' : 'userCollection')
-          .doc(uid)
-          .get();
-      return snapshot.data();
-    } catch (e) {
-      throw Exception('Error getting user: $e');
-    }
-  }
-
   Future<void> placeOrder(OrderModel order) async {
     try {
-      final data = await db
-          .collection('orderCollection')
-          .doc(order.orderId)
-          .set(order.toJson());
+      final data =
+          await db.collection('orderCollection').doc(order.orderId).set({
+        'orderId': order.orderId,
+        'supplierId': order.supplierId,
+        'orderDate': order.orderDate.toIso8601String(),
+        'feeds': order.feeds.map((feed) => feed.toJson()).toList(),
+        'status': order.status?.toString(),
+      });
       return data;
     } catch (e) {
       throw Exception('Error placing order: $e');
@@ -345,6 +308,47 @@ class FirestoreDB {
       await db.collection('insuranceCollection').doc(claimId).delete();
     } catch (e) {
       throw Exception('Error rejecting insurance claim: $e');
+    }
+  }
+
+  Future<void> storeNotifications(
+    String uID,
+    NotificationModel notification,
+  ) async {
+    try {
+      await db
+          .collection('notifications')
+          .doc(uID)
+          .collection('user')
+          .add(notification.toJson());
+
+      return;
+    } catch (e) {
+      throw Exception('Error getting user: $e');
+    }
+  }
+
+  Future<void> updateFcmToken(String uId, String token, bool flag) async {
+    if (flag) {
+      try {
+        final data = await db
+            .collection('supplierCollection')
+            .doc(uId)
+            .update({"fcm": token});
+        return data;
+      } catch (e) {
+        throw Exception('Error updating booking status: $e');
+      }
+    } else {
+      try {
+        final data = await db
+            .collection('userCollection')
+            .doc(uId)
+            .update({"fcm": token});
+        return data;
+      } catch (e) {
+        throw Exception('Error updating booking status: $e');
+      }
     }
   }
 

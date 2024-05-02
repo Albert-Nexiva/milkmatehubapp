@@ -514,7 +514,10 @@ class SupplierRegistrationState extends State<SupplierRegistration> {
                                 if (context.mounted) {
                                   Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
-                                      builder: (context) => const HomeScreen(),
+                                      builder: (context) =>  HomeScreen(
+                                        user: widget.user,
+                                       
+                                      ),
                                     ),
                                     (route) => false,
                                   );

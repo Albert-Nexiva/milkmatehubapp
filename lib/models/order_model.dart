@@ -12,7 +12,7 @@ class OrderModel {
     required this.supplierId,
     required this.orderDate,
     required this.feeds,
-    required this.status,
+     this.status,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {

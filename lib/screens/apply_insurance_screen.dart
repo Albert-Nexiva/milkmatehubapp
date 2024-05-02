@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:milkmatehub/constants/methods.dart';
@@ -133,17 +137,54 @@ class InsuranceApplicationScreenState
                       return null;
                     },
                   ),
-                  TextFormField(
-                    controller: _descriptionOfIncidentController,
-                    decoration: const InputDecoration(
-                        labelText: 'Description of Incident'),
-                    validator: (value) {
-                      if (value != null && value.isEmpty) {
-                        return 'Please enter the description of the incident';
-                      }
-                      return null;
+                  const SizedBox(height: 16.0),
+                  InkWell(
+                    onTap: () async {
+                      FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(
+                              type: FileType.custom,
+                              allowedExtensions: ['pdf']);
+
+                      if (result != null) {
+                        File file = File(result.files.single.path!);
+                        final bytes = File(file.path).readAsBytesSync();
+
+                        setState(() {
+                          _descriptionOfIncidentController.text =
+                              base64Encode(bytes);
+                        });
+                      } 
                     },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          _descriptionOfIncidentController.text.isEmpty
+                              ? "Description of Incident"
+                              : "File Added",
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
+                  // TextFormField(
+                  //   controller: _descriptionOfIncidentController,
+                  //   decoration: const InputDecoration(
+                  //       labelText: 'Description of Incident'),
+                  //   validator: (value) {
+                  //     if (value != null && value.isEmpty) {
+                  //       return 'Please enter the description of the incident';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                   DropdownButtonFormField<String>(
                     value: _typeOfCoverageRequestedController,
                     onChanged: (newValue) {

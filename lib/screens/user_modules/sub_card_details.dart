@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:milkmatehub/local_storage/key_value_storage_service.dart';
+import 'package:milkmatehub/models/user_model.dart';
 import 'package:milkmatehub/screens/home_screen.dart';
 
 class SubCardDetailsScreen extends HookWidget {
@@ -10,12 +12,17 @@ class SubCardDetailsScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    CacheStorageService cacheStorageService = CacheStorageService();
+    final cardNumberController = useTextEditingController();
+    final expiryDateController = useTextEditingController();
+    final cardHolderNameController = useTextEditingController();
+    final cvvCodeController = useTextEditingController();
     final cardNumber = useState('');
     final expiryDate = useState('');
     final cardHolderName = useState('');
     final cvvCode = useState('');
-
     final isCvvFocused = useState(false);
+
     final formKey = GlobalKey<FormState>();
 
     final isLoading = useState(false);
@@ -42,42 +49,78 @@ class SubCardDetailsScreen extends HookWidget {
                       },
                     ),
                     const Divider(),
-                    CreditCardForm(
-                      formKey: formKey,
-                      obscureCvv: true,
-                      obscureNumber: false,
-                      cardNumber: cardNumber.value,
-                      cvvCode: cvvCode.value,
-                      isHolderNameVisible: true,
-                      isCardNumberVisible: true,
-                      isExpiryDateVisible: true,
-                      cardHolderName: cardHolderName.value,
-                      expiryDate: expiryDate.value,
-                      inputConfiguration: const InputConfiguration(
-                        cardNumberDecoration: InputDecoration(
-                          labelText: 'Number',
-                          hintText: 'XXXX XXXX XXXX XXXX',
-                        ),
-                        expiryDateDecoration: InputDecoration(
-                          labelText: 'Expired Date',
-                          hintText: 'XX/XX',
-                        ),
-                        cvvCodeDecoration: InputDecoration(
-                          labelText: 'CVV',
-                          hintText: 'XXX',
-                        ),
-                        cardHolderDecoration: InputDecoration(
-                          labelText: 'Card Holder',
-                        ),
+                    Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            controller: cardNumberController,
+                            decoration: const InputDecoration(
+                              labelText: 'Card Number',
+                            ),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return 'Please enter card number';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
+                            controller: expiryDateController,
+                            decoration: const InputDecoration(
+                              labelText: 'Expiry Date',
+                              hintText: 'MM/YY',
+                            ),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return 'Please enter expiry date';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
+                            controller: cardHolderNameController,
+                            decoration: const InputDecoration(
+                              labelText: 'Cardholder Name',
+                            ),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return 'Please enter cardholder name';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
+                            controller: cvvCodeController,
+                            decoration: const InputDecoration(
+                              labelText: 'CVV Code',
+                            ),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return 'Please enter CVV code';
+                              }
+                              return null;
+                            },
+                          ),
+                          Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.all(8),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  FocusScope.of(context).unfocus();
+                                  cardNumber.value = cardNumberController.text;
+                                  expiryDate.value = expiryDateController.text;
+                                  cardHolderName.value =
+                                      cardHolderNameController.text;
+                                  cvvCode.value = cvvCodeController.text;
+                                }
+                              },
+                              child: const Text('Verify Card'),
+                            ),
+                          ),
+                        ],
                       ),
-                      onCreditCardModelChange:
-                          (CreditCardModel creditCardModel) {
-                        cardNumber.value = creditCardModel.cardNumber;
-                        expiryDate.value = creditCardModel.expiryDate;
-                        cardHolderName.value = creditCardModel.cardHolderName;
-                        cvvCode.value = creditCardModel.cvvCode;
-                        isCvvFocused.value = creditCardModel.isCvvFocused;
-                      },
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -91,7 +134,8 @@ class SubCardDetailsScreen extends HookWidget {
                               if (formKey.currentState!.validate()) {
                                 try {
                                   isLoading.value = true;
-
+                                  final UserModel user =
+                                      await cacheStorageService.getAuthUser();
                                   if (context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -101,8 +145,9 @@ class SubCardDetailsScreen extends HookWidget {
                                     Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            const HomeScreen(),
+                                        builder: (context) => HomeScreen(
+                                          user: user,
+                                        ),
                                       ),
                                       (route) => false,
                                     );

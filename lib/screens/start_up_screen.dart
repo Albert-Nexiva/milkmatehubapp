@@ -11,7 +11,9 @@ Future<void> navigateToHome(BuildContext context) async {
     if (context.mounted) {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) =>  HomeScreen(
+                user: user,
+          )),
           (route) => false);
     }
   } else {

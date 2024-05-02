@@ -1,8 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:milkmatehub/api/firebase_messaging_api.dart';
 import 'package:milkmatehub/constants/methods.dart';
 import 'package:milkmatehub/firebase/firestore_db.dart';
 import 'package:milkmatehub/models/insurance_model.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 
 class InsuranceManagement extends StatefulWidget {
   const InsuranceManagement({
@@ -114,6 +119,37 @@ class _InsuranceManagementState extends State<InsuranceManagement> {
                                       fontWeight: FontWeight.w500,
                                       color: Colors.white,
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  InkWell(
+                                    onTap: () async {
+                                      final file = base64Decode(
+                                          record.descriptionOfIncident);
+
+                                      final tempDir =
+                                          await getTemporaryDirectory();
+                                      final filePath =
+                                          '${tempDir.path}/incident_file${generateRandomString()}.pdf';
+                                      await File(filePath).writeAsBytes(file);
+                                      print('File stored at: $filePath');
+
+                                      OpenFilex.open(
+                                        filePath,
+                                        type: 'application/pdf',
+                                      );
+                                    },
+                                    child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white54,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        padding: const EdgeInsets.all(6),
+                                        child: const Center(
+                                            child: Text("View Description"))),
                                   ),
                                   const SizedBox(
                                     height: 10,

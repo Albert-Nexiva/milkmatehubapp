@@ -132,7 +132,12 @@ class _LoginScreenState extends State<AdminLoginScreen> {
 
         if (context.mounted && isCached) {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(
+                      user: value['type'] == 'supplier'
+                          ? SupplierModel.fromJson(value)
+                          : UserModel.fromJson(value),
+                    )),
           );
         }
       }
