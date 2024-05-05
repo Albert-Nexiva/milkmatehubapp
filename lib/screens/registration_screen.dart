@@ -88,8 +88,8 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                         });
                         final UserCredential user = await FirebaseAuth.instance
                             .createUserWithEmailAndPassword(
-                          email: _emailController.text,
-                          password: _passwordController.text,
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim(),
                         );
                         if (user.user != null) {
                           if (context.mounted) {
