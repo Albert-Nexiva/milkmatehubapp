@@ -80,7 +80,7 @@ class ProductionRecordsScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
-                                    "₹ ${record.price}",
+                                    "₹ ${record.price.toStringAsFixed(2)}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18),
